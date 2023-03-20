@@ -1,0 +1,24 @@
+package com.rodrigojramos.expense.services;
+
+
+import com.rodrigojramos.expense.dto.ExpenseDTO;
+import com.rodrigojramos.expense.entities.Expense;
+import com.rodrigojramos.expense.repositories.ExpenseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class ExpenseService {
+
+    @Autowired
+    private ExpenseRepository repository;
+
+    @Transactional(readOnly = true)
+    public List<ExpenseDTO> findAll() {
+        List<Expense> result = repository.findAll();
+        return result.stream().map(x -> new ExpenseDTO(x)).toList();
+    }
+}
