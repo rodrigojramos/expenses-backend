@@ -2,7 +2,6 @@ package com.rodrigojramos.expense.controllers;
 
 import com.rodrigojramos.expense.dto.ExpenseDTO;
 import com.rodrigojramos.expense.services.ExpenseService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +16,12 @@ public class ExpenseController {
 
     @Autowired
     private ExpenseService service;
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ExpenseDTO> findById(@PathVariable Long id) {
+        ExpenseDTO dto = service.findById(id);
+        return ResponseEntity.ok(dto);
+    }
 
     @GetMapping
     public ResponseEntity<List<ExpenseDTO>> findAll() {

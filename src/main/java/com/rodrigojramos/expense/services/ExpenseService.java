@@ -9,12 +9,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExpenseService {
 
     @Autowired
     private ExpenseRepository repository;
+
+    @Transactional(readOnly = true)
+    public ExpenseDTO findById(Long id) {
+        Optional<Expense> result = repository.findById(id);
+        Expense expense = result.get();
+        ExpenseDTO dto = new ExpenseDTO(expense);
+        return dto;
+    }
 
     @Transactional(readOnly = true)
     public List<ExpenseDTO> findAll() {
