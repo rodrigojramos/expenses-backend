@@ -21,4 +21,16 @@ public class ExpenseService {
         List<Expense> result = repository.findAll();
         return result.stream().map(x -> new ExpenseDTO(x)).toList();
     }
+
+    @Transactional
+    public ExpenseDTO insert(ExpenseDTO dto) {
+        Expense entity = new Expense();
+        entity.setDescription(dto.getDescription());
+        entity.setAmount(dto.getAmount());
+        entity.setDate(dto.getDate());
+
+        entity = repository.save(entity);
+
+        return new ExpenseDTO(entity);
+    }
 }
