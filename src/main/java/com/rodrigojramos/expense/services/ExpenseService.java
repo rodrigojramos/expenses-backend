@@ -47,6 +47,11 @@ public class ExpenseService {
         return new ExpenseDTO(entity);
     }
 
+    @Transactional
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
+
     private void copyDtoToEntity(ExpenseDTO dto, Expense entity) {
         entity.setDescription(dto.getDescription());
         entity.setAmount(dto.getAmount());
