@@ -34,12 +34,22 @@ public class ExpenseService {
     @Transactional
     public ExpenseDTO insert(ExpenseDTO dto) {
         Expense entity = new Expense();
+        copyDtoToEntity(dto, entity);
+        entity = repository.save(entity);
+        return new ExpenseDTO(entity);
+    }
+
+    @Transactional
+    public ExpenseDTO update(Long id, ExpenseDTO dto) {
+        Expense entity = repository.getReferenceById(id);
+        copyDtoToEntity(dto, entity);
+        entity = repository.save(entity);
+        return new ExpenseDTO(entity);
+    }
+
+    private void copyDtoToEntity(ExpenseDTO dto, Expense entity) {
         entity.setDescription(dto.getDescription());
         entity.setAmount(dto.getAmount());
         entity.setDate(dto.getDate());
-
-        entity = repository.save(entity);
-
-        return new ExpenseDTO(entity);
     }
 }
