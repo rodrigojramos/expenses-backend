@@ -11,9 +11,6 @@ public class ExpenseDTO {
     private Double amount;
     private LocalDate date;
 
-    public ExpenseDTO() {
-    }
-
     public ExpenseDTO(Long id, String description, Double amount, LocalDate date) {
         this.id = id;
         this.description = description;

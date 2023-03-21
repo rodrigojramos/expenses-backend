@@ -4,12 +4,14 @@ package com.rodrigojramos.expense.services;
 import com.rodrigojramos.expense.dto.ExpenseDTO;
 import com.rodrigojramos.expense.entities.Expense;
 import com.rodrigojramos.expense.repositories.ExpenseRepository;
+import com.rodrigojramos.expense.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExpenseService {
@@ -19,10 +21,9 @@ public class ExpenseService {
 
     @Transactional(readOnly = true)
     public ExpenseDTO findById(Long id) {
-        Optional<Expense> result = repository.findById(id);
-        Expense expense = result.get();
-        ExpenseDTO dto = new ExpenseDTO(expense);
-        return dto;
+        Expense expense = repository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Recurso não encontrado"));
+        return new ExpenseDTO(expense);
     }
 
     @Transactional(readOnly = true)
@@ -41,15 +42,26 @@ public class ExpenseService {
 
     @Transactional
     public ExpenseDTO update(Long id, ExpenseDTO dto) {
-        Expense entity = repository.getReferenceById(id);
-        copyDtoToEntity(dto, entity);
-        entity = repository.save(entity);
-        return new ExpenseDTO(entity);
+        try{
+            Expense entity = repository.getReferenceById(id);
+            copyDtoToEntity(dto, entity);
+            entity = repository.save(entity);
+            return new ExpenseDTO(entity);
+        }
+        catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
+
     }
 
     @Transactional
     public void delete(Long id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        }
+        catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
     }
 
     private void copyDtoToEntity(ExpenseDTO dto, Expense entity) {
