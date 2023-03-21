@@ -1,14 +1,22 @@
 package com.rodrigojramos.expense.dto;
 
 import com.rodrigojramos.expense.entities.Expense;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
 public class ExpenseDTO {
 
     private Long id;
+    @Size(min = 3, message = "Descrição precisa ter no mínimo 3 caracteres")
+    @NotBlank(message = "Campo requerido")
     private String description;
+    @Positive(message = "O valor deve ser positivo")
     private Double amount;
+    @PastOrPresent(message = "A data não pode ser futura")
     private LocalDate date;
 
     public ExpenseDTO(Long id, String description, Double amount, LocalDate date) {
