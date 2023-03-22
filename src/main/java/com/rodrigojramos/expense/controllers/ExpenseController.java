@@ -4,6 +4,8 @@ import com.rodrigojramos.expense.dto.ExpenseDTO;
 import com.rodrigojramos.expense.services.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -25,8 +27,10 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ExpenseDTO>> findAll() {
-        List<ExpenseDTO> dto = service.findAll();
+    public ResponseEntity<Page<ExpenseDTO>> findAll(
+            @RequestParam(name = "description", defaultValue = "") String description,
+            Pageable pageable) {
+        Page<ExpenseDTO> dto = service.findAll(description, pageable);
         return ResponseEntity.ok(dto);
     }
 

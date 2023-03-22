@@ -8,6 +8,8 @@ import com.rodrigojramos.expense.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +29,9 @@ public class ExpenseService {
     }
 
     @Transactional(readOnly = true)
-    public List<ExpenseDTO> findAll() {
-        List<Expense> result = repository.findAll();
-        return result.stream().map(x -> new ExpenseDTO(x)).toList();
+    public Page<ExpenseDTO> findAll(String description, Pageable pageable) {
+        Page<Expense> result = repository.searchByName(description, pageable);
+        return result.map(x -> new ExpenseDTO(x));
     }
 
     @Transactional
