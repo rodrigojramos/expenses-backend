@@ -1,6 +1,7 @@
 package com.rodrigojramos.expense.dto;
 
 import com.rodrigojramos.expense.entities.Expense;
+import com.rodrigojramos.expense.projections.ExpenseProjection;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
@@ -31,6 +32,13 @@ public class ExpenseDTO {
         description = entity.getDescription();
         amount = entity.getAmount();
         date = entity.getDate();
+    }
+
+    public ExpenseDTO(ExpenseProjection projection) {
+        id = projection.getId();
+        description = projection.getDescription();
+        amount = projection.getAmount();
+        date = projection.getDate();
     }
 
     public Long getId() {

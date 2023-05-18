@@ -52,4 +52,11 @@ public class ExpenseController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping(value = "/{expenseMonth}/{expenseYear}")
+    public Page<ExpenseDTO> findByMonthAndYear(@PathVariable Integer expenseMonth, @PathVariable Integer expenseYear,
+                                               Pageable pageable) {
+        Page<ExpenseDTO> result = service.findByMonthAndYear(expenseMonth, expenseYear, pageable);
+        return result;
+    }
 }

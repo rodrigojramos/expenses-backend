@@ -3,6 +3,7 @@ package com.rodrigojramos.expense.services;
 
 import com.rodrigojramos.expense.dto.ExpenseDTO;
 import com.rodrigojramos.expense.entities.Expense;
+import com.rodrigojramos.expense.projections.ExpenseProjection;
 import com.rodrigojramos.expense.repositories.ExpenseRepository;
 import com.rodrigojramos.expense.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -64,6 +65,12 @@ public class ExpenseService {
         catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException("Recurso não encontrado");
         }
+    }
+
+    @Transactional
+    public Page<ExpenseDTO> findByMonthAndYear(Integer expenseMonth, Integer expenseYear, Pageable pageable ) {
+        Page<ExpenseProjection> result = repository.searchByMonthAndYear(expenseMonth, expenseYear, pageable);
+        return result.map(x -> new ExpenseDTO(x));
     }
 
     private void copyDtoToEntity(ExpenseDTO dto, Expense entity) {
