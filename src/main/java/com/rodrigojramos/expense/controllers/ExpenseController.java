@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value ="/expenses")
@@ -55,8 +54,9 @@ public class ExpenseController {
 
     @GetMapping(value = "/{expenseMonth}/{expenseYear}")
     public Page<ExpenseDTO> findByMonthAndYear(@PathVariable Integer expenseMonth, @PathVariable Integer expenseYear,
+                                              @RequestParam(name = "description", defaultValue = "") String description,
                                                Pageable pageable) {
-        Page<ExpenseDTO> result = service.findByMonthAndYear(expenseMonth, expenseYear, pageable);
+        Page<ExpenseDTO> result = service.findByMonthAndYear(expenseMonth, expenseYear, description, pageable);
         return result;
     }
 }

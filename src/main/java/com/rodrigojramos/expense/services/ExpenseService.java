@@ -14,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 public class ExpenseService {
 
@@ -67,9 +65,9 @@ public class ExpenseService {
         }
     }
 
-    @Transactional
-    public Page<ExpenseDTO> findByMonthAndYear(Integer expenseMonth, Integer expenseYear, Pageable pageable ) {
-        Page<ExpenseProjection> result = repository.searchByMonthAndYear(expenseMonth, expenseYear, pageable);
+    @Transactional(readOnly = true)
+    public Page<ExpenseDTO> findByMonthAndYear(Integer expenseMonth, Integer expenseYear, String description, Pageable pageable ) {
+        Page<Expense> result = repository.searchExpenseByMonthYearAndDescription(expenseMonth, expenseYear, description, pageable);
         return result.map(x -> new ExpenseDTO(x));
     }
 
